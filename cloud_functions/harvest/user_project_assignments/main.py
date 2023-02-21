@@ -15,12 +15,12 @@ if not project_id:
 
 def load_config(project_id, service) -> dict:
     return {
-        "url": "https://api.harvestapp.com/v2/time_entries?page=",
+        "url": "https://api.harvestapp.com/v2/user_assignments?page=",
         "headers": harvest_headers(project_id, service),
-        "dataset_id": os.environ.get("DATASET_ID"),
+        "dataset_id": "Harvest",
         "gcp_project": project_id,
-        "table_name": os.environ.get("TABLE_NAME"),
-        "location": os.environ.get("TABLE_LOCATION"),
+        "table_name": "user_project_assignments",
+        "location": "EU",
         "service": service,
     }
 
@@ -39,23 +39,22 @@ def get_harvest_pages(url: str, headers: dict):
 
 
 def main(data: dict, context):
-    service = "Data Pipeline - Harvest Timesheets"
+    service = "Data Pipeline - Harvest User Project Assignments"
     config = load_config(project_id, service)
 
     pages, entries = get_harvest_pages(config["url"], config["headers"])
     print(f"Total pages: {pages}")
     df = asyncio.run(
         get_all_data(
-            config["url"], config["headers"], pages, "time_entries", batch_size=10
+            config["url"], config["headers"], pages, "user_assignments", batch_size=10
         )
     ).reset_index(drop=True)
-    
     df = flatten_columns(df)
-    print(len(df), entries)
-    len(df) == entries
+
     assert len(df) == entries
     write_to_bigquery(config, df, "WRITE_TRUNCATE")
 
 
 if __name__ == "__main__":
     main({}, None)
+
