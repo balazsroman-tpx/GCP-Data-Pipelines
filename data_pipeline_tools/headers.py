@@ -1,4 +1,4 @@
-from util import access_secret_version
+from .util import access_secret_version
 
 
 def harvest_headers(project_id, service):
