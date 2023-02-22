@@ -4,6 +4,10 @@ from google.cloud import bigquery, secretmanager
 
 
 def write_to_bigquery(config: dict, df: pd.DataFrame, write_disposition: str) -> None:
+    # config must contain the following keys:
+    # - dataset_id
+    # - table_name
+    # - location
     # Create a BigQuery client with the specified location.
     client = bigquery.Client(location=config["location"])
 
@@ -61,3 +65,16 @@ def access_secret_version(
     name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
     response = client.access_secret_version(name=name)
     return response.payload.data.decode("UTF-8")
+
+
+def get_harvest_pages(url: str, headers: dict):
+    url = f"{url}1"
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
+        data = response.json()
+
+        return data["total_pages"], data["total_entries"]
+    except (requests.exceptions.RequestException, KeyError) as e:
+        print(f"Error retrieving total pages: {e}")
+        return None
