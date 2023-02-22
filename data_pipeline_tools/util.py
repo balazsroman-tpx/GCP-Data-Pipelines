@@ -1,7 +1,7 @@
 import pandas as pd
 from google.api_core.exceptions import BadRequest
 from google.cloud import bigquery, secretmanager
-
+import requests
 
 def write_to_bigquery(config: dict, df: pd.DataFrame, write_disposition: str) -> None:
     # config must contain the following keys:
