@@ -2,6 +2,34 @@ import pandas as pd
 from google.api_core.exceptions import BadRequest
 from google.cloud import bigquery, secretmanager
 import requests
+import pandas_gbq
+from .auth import service_account_json
+
+def read_from_bigquery(project_id: str, query: str) -> pd.DataFrame:
+    """
+    Reads data from a BigQuery table and returns it as a Pandas DataFrame.
+
+    Args:
+        project_id (str): The ID of the Google Cloud project that contains the BigQuery table.
+        query (str): The SQL query to execute on the BigQuery table.
+
+    Returns:
+        pd.DataFrame: A Pandas DataFrame containing the data from the BigQuery table.
+    """
+    # Load the credentials from the service account JSON file
+    credentials_info = json.loads(service_account_json(project_id))
+    credentials = service_account.Credentials.from_service_account_info(
+        credentials_info,
+        scopes=["https://www.googleapis.com/auth/bigquery"]
+    )
+
+    # Read the data from the BigQuery table and return it as a DataFrame
+    return pandas_gbq.read_gbq(
+        query,
+        project_id=project_id,
+        credentials=credentials
+    )
+
 
 def write_to_bigquery(config: dict, df: pd.DataFrame, write_disposition: str) -> None:
     # config must contain the following keys:
