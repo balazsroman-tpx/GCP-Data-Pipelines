@@ -1,3 +1,6 @@
+from google.cloud import secretmanager
+
+
 def harvest_headers(project_id, service):
     return {
         "User-Agent": "TPX Cloud Functions",
