@@ -13,3 +13,5 @@ def harvest_headers(project_id, service):
 def pipedrive_access_token(project_id):
     return access_secret_version(project_id, "PIPEDRIVE_ACCESS_TOKEN")
     
+def service_account_json(project_id):
+    return access_secret_version(project_id, "SERVICE_ACCOUNT_JSON")
