@@ -4,6 +4,7 @@ from google.cloud import bigquery
 import requests
 import pandas_gbq
 from .auth import service_account_json
+import json
 
 def read_from_bigquery(project_id: str, query: str) -> pd.DataFrame:
     """
