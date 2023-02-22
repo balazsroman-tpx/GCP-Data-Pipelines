@@ -45,4 +45,4 @@ async def get_all_data(
         print(f"Getting pages {start_page} to {end_page}")
         df = await get_data_for_page_range(url, start_page, end_page, headers, key)
         dfs.append(df)
-    return pd.concat(dfs)
+    return pd.concat(dfs).reset_index(drop=True)
