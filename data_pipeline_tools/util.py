@@ -1,6 +1,6 @@
 import pandas as pd
 from google.api_core.exceptions import BadRequest
-from google.cloud import bigquery
+from google.cloud import bigquery, secretmanager
 import requests
 import pandas_gbq
 from .auth import service_account_json
