@@ -1,6 +1,3 @@
-from .util import access_secret_version
-
-
 def harvest_headers(project_id, service):
     return {
         "User-Agent": "TPX Cloud Functions",
@@ -15,3 +12,12 @@ def pipedrive_access_token(project_id):
     
 def service_account_json(project_id):
     return access_secret_version(project_id, "SERVICE_ACCOUNT_JSON")
+
+def access_secret_version(
+    project_id: str, secret_id: str, version_id: str = "latest"
+) -> str:
+    # Create the Secret Manager client and get the secret payload.
+    client = secretmanager.SecretManagerServiceClient()
+    name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+    response = client.access_secret_version(name=name)
+    return response.payload.data.decode("UTF-8")

@@ -85,16 +85,6 @@ def flatten_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def access_secret_version(
-    project_id: str, secret_id: str, version_id: str = "latest"
-) -> str:
-    # Create the Secret Manager client and get the secret payload.
-    client = secretmanager.SecretManagerServiceClient()
-    name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
-    response = client.access_secret_version(name=name)
-    return response.payload.data.decode("UTF-8")
-
-
 def get_harvest_pages(url: str, headers: dict):
     url = f"{url}1"
     try:
