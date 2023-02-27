@@ -76,6 +76,13 @@ def find_and_flatten_columns(df: pd.DataFrame) -> pd.DataFrame:
 def flatten_columns(df: pd.DataFrame, nested_columns: list) -> pd.DataFrame:
     # For each nested column, flatten the JSON values using Pandas' json_normalize function.
     for column in nested_columns:
+        # Convert the column values to dictionaries if they are integers.
+        df[column] = df[column].apply(
+            lambda x: x if not isinstance(x, int) else {"value": x}
+        )
+        # Convert the column values to dictionaries if they are None.
+        df[column] = df[column].apply(lambda x: x if not None else {})
+
         print(f"Flattening column: {column}")
         flattened_df = pd.json_normalize(df[column], max_level=1).add_prefix(
             f"{column}_"
