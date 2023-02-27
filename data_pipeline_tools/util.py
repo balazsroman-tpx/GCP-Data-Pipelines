@@ -81,7 +81,7 @@ def flatten_columns(df: pd.DataFrame, nested_columns: list) -> pd.DataFrame:
             lambda x: x if not isinstance(x, int) else {"value": x}
         )
         # Convert the column values to dictionaries if they are None.
-        df[column] = df[column].apply(lambda x: x if not None else {})
+        df[column] = df[column].apply(lambda x: x if x is not None else {})
 
         print(f"Flattening column: {column}")
         flattened_df = pd.json_normalize(df[column], max_level=1).add_prefix(
