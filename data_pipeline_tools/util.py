@@ -78,7 +78,7 @@ def flatten_columns(df: pd.DataFrame, nested_columns: list) -> pd.DataFrame:
     for column in nested_columns:
         # Convert the column values to dictionaries if they are integers.
         df[column] = df[column].apply(
-            lambda x: x if not isinstance(x, int) else {"value": x}
+            lambda x: {"value": x} if isinstance(x, int) or isinstance(x, float) or isinstance(x, str) or isinstance(x, list) else x
         )
         # Convert the column values to dictionaries if they are None.
         df[column] = df[column].apply(lambda x: x if x is not None else {})
