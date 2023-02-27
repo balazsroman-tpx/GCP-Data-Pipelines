@@ -1,12 +1,14 @@
+import json
+
 import pandas as pd
+import pandas_gbq
+import requests
 from google.api_core.exceptions import BadRequest
 from google.cloud import bigquery
-import requests
-import pandas_gbq
 from google.oauth2 import service_account
 
 from .auth import service_account_json
-import json
+
 
 def read_from_bigquery(project_id: str, query: str) -> pd.DataFrame:
     """
@@ -22,16 +24,11 @@ def read_from_bigquery(project_id: str, query: str) -> pd.DataFrame:
     # Load the credentials from the service account JSON file
     credentials_info = json.loads(service_account_json(project_id))
     credentials = service_account.Credentials.from_service_account_info(
-        credentials_info,
-        scopes=["https://www.googleapis.com/auth/bigquery"]
+        credentials_info, scopes=["https://www.googleapis.com/auth/bigquery"]
     )
 
     # Read the data from the BigQuery table and return it as a DataFrame
-    return pandas_gbq.read_gbq(
-        query,
-        project_id=project_id,
-        credentials=credentials
-    )
+    return pandas_gbq.read_gbq(query, project_id=project_id, credentials=credentials)
 
 
 def write_to_bigquery(config: dict, df: pd.DataFrame, write_disposition: str) -> None:
@@ -66,15 +63,17 @@ def write_to_bigquery(config: dict, df: pd.DataFrame, write_disposition: str) ->
     )
 
 
-def flatten_columns(df: pd.DataFrame) -> pd.DataFrame:
+def find_and_flatten_columns(df: pd.DataFrame) -> pd.DataFrame:
     # Find all columns that have a dictionary as a value in the first row of the DataFrame.
-
     nested_columns = [
         column_name
         for column_name, value in df.iloc[0].items()
         if isinstance(value, dict)
     ]
+    return flatten_columns(df, nested_columns)
 
+
+def flatten_columns(df: pd.DataFrame, nested_columns: list) -> pd.DataFrame:
     # For each nested column, flatten the JSON values using Pandas' json_normalize function.
     for column in nested_columns:
         flattened_df = pd.json_normalize(df[column], max_level=1).add_prefix(
