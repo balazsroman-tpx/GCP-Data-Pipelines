@@ -1,5 +1,7 @@
 import json
+from datetime import datetime
 
+import holidays
 import pandas as pd
 import pandas_gbq
 import requests
@@ -78,7 +80,12 @@ def flatten_columns(df: pd.DataFrame, nested_columns: list) -> pd.DataFrame:
     for column in nested_columns:
         # Convert the column values to dictionaries if they are integers.
         df[column] = df[column].apply(
-            lambda x: {"value": x} if isinstance(x, int) or isinstance(x, float) or isinstance(x, str) or isinstance(x, list) else x
+            lambda x: {"value": x}
+            if isinstance(x, int)
+            or isinstance(x, float)
+            or isinstance(x, str)
+            or isinstance(x, list)
+            else x
         )
         # Convert the column values to dictionaries if they are None.
         df[column] = df[column].apply(lambda x: x if x is not None else {})
@@ -106,3 +113,19 @@ def get_harvest_pages(url: str, headers: dict):
     except (requests.exceptions.RequestException, KeyError) as e:
         print(f"Error retrieving total pages: {e}")
         return None
+
+
+def get_uk_holidays(year=datetime.now().year):
+    print("Getting UK holidays")
+    holidays_resp = list(
+        map(
+            lambda date: {"date": date[0], "name": date[1]},
+            holidays.UK(years=year).items(),
+        )
+    )
+    holidays_df = pd.DataFrame(holidays_resp).sort_values("date").reset_index(drop=True)
+
+    return holidays_df[
+        ~holidays_df["name"].str.contains(r"\[Scotland\]")
+        & ~holidays_df["name"].str.contains(r"\[Northern Ireland\]")
+    ]
