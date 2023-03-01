@@ -3,10 +3,13 @@ import os
 
 import requests
 
-from data_pipeline_tools.headers import harvest_headers
 from data_pipeline_tools.asyncs import get_all_data
-from data_pipeline_tools.util import write_to_bigquery, flatten_columns
-
+from data_pipeline_tools.auth import harvest_headers
+from data_pipeline_tools.util import (
+    find_and_flatten_columns,
+    get_harvest_pages,
+    write_to_bigquery,
+)
 
 project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 if not project_id:
@@ -17,25 +20,12 @@ def load_config(project_id, service) -> dict:
     return {
         "url": "https://api.harvestapp.com/v2/user_assignments?page=",
         "headers": harvest_headers(project_id, service),
-        "dataset_id": "Harvest",
+        "dataset_id": os.environ.get("DATASET_ID"),
         "gcp_project": project_id,
-        "table_name": "user_project_assignments",
-        "location": "EU",
+        "table_name": os.environ.get("TABLE_NAME"),
+        "location": os.environ.get("TABLE_LOCATION"),
         "service": service,
     }
-
-
-def get_harvest_pages(url: str, headers: dict):
-    url = f"{url}1"
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
-        data = response.json()
-
-        return data["total_pages"], data["total_entries"]
-    except (requests.exceptions.RequestException, KeyError) as e:
-        print(f"Error retrieving total pages: {e}")
-        return None
 
 
 def main(data: dict, context):
@@ -49,7 +39,7 @@ def main(data: dict, context):
             config["url"], config["headers"], pages, "user_assignments", batch_size=10
         )
     ).reset_index(drop=True)
-    df = flatten_columns(df)
+    df = find_and_flatten_columns(df)
 
     assert len(df) == entries
     write_to_bigquery(config, df, "WRITE_TRUNCATE")
@@ -57,4 +47,3 @@ def main(data: dict, context):
 
 if __name__ == "__main__":
     main({}, None)
-

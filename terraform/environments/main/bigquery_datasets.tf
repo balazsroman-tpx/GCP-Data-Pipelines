@@ -28,4 +28,16 @@ resource "google_bigquery_dataset" "harvest_raw" {
   }
 }
 
+resource "google_bigquery_dataset" "pipedrive_raw" {
+  dataset_id  = "Pipedrive_Raw"
+  description = "Dataset for tables containing raw pipedrive data"
+  location    = "europe-west2"
+
+  labels = {
+    env = var.env
+  }
+  default_encryption_configuration {
+    kms_key_name = data.google_kms_crypto_key.bigquery_key.id
+  }
+}
 

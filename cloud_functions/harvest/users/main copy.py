@@ -13,12 +13,12 @@ from data_pipeline_tools.util import (
 
 project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 if not project_id:
-    project_id = input("Enter GCP project ID: ")
+    project_id = "tpx-cheetah"
 
 
 def load_config(project_id, service) -> dict:
     return {
-        "url": "https://api.harvestapp.com/v2/users?page=",
+        "url": "https://api.harvestapp.com/v2/tasks?page=",
         "headers": harvest_headers(project_id, service),
         "dataset_id": os.environ.get("DATASET_ID"),
         "gcp_project": project_id,
@@ -35,11 +35,14 @@ def main(data: dict, context):
     pages, entries = get_harvest_pages(config["url"], config["headers"])
     print(f"Total pages: {pages}")
     df = asyncio.run(
-        get_all_data(config["url"], config["headers"], pages, "users", batch_size=10)
+        get_all_data(config["url"], config["headers"], pages, "tasks", batch_size=10)
     ).reset_index(drop=True)
     df = find_and_flatten_columns(df)
 
     assert len(df) == entries
+    import pdb
+
+    pdb.set_trace()
     write_to_bigquery(config, df, "WRITE_TRUNCATE")
 
 

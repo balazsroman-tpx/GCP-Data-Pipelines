@@ -95,7 +95,7 @@ pandas = "*"
 type = "git"
 url = "https://github.com/tpximpact/GCP-Data-Pipelines.git"
 reference = "main"
-resolved_reference = "2d899ccc94b41a8016fe40c37d58bca9c99a3aeb"
+resolved_reference = "820994171d1def691dd7a2af8e051b04041fbad9"
 
 [[package]]
 name = "db-dtypes"
@@ -192,7 +192,7 @@ python-versions = "*"
 
 [[package]]
 name = "google-cloud-bigquery"
-version = "3.5.0"
+version = "3.6.0"
 description = "Google BigQuery API client library"
 category = "main"
 optional = false
@@ -200,7 +200,7 @@ python-versions = ">=3.7"
 
 [package.dependencies]
 google-api-core = {version = ">=1.31.5,<2.0.0 || >2.3.0,<3.0.0dev", extras = ["grpc"]}
-google-cloud-core = ">=1.4.1,<3.0.0dev"
+google-cloud-core = ">=1.6.0,<3.0.0dev"
 google-resumable-media = ">=0.6.0,<3.0dev"
 grpcio = [
     {version = ">=1.47.0,<2.0dev", markers = "python_version < \"3.11\""},
@@ -213,11 +213,11 @@ python-dateutil = ">=2.7.2,<3.0dev"
 requests = ">=2.21.0,<3.0.0dev"
 
 [package.extras]
-all = ["google-cloud-bigquery-storage (>=2.0.0,<3.0.0dev)", "grpcio (>=1.47.0,<2.0dev)", "pyarrow (>=3.0.0)", "pandas (>=1.1.0)", "db-dtypes (>=0.3.0,<2.0.0dev)", "ipywidgets (==7.7.1)", "geopandas (>=0.9.0,<1.0dev)", "Shapely (>=1.8.4,<2.0dev)", "ipython (>=7.0.1,!=8.1.0)", "tqdm (>=4.7.4,<5.0.0dev)", "opentelemetry-api (>=1.1.0)", "opentelemetry-sdk (>=1.1.0)", "opentelemetry-instrumentation (>=0.20b0)", "grpcio (>=1.49.1,<2.0dev)"]
+all = ["google-cloud-bigquery-storage (>=2.0.0,<3.0.0dev)", "grpcio (>=1.47.0,<2.0dev)", "pyarrow (>=3.0.0)", "pandas (>=1.1.0)", "db-dtypes (>=0.3.0,<2.0.0dev)", "ipywidgets (>=7.7.0,<8.0.1)", "geopandas (>=0.9.0,<1.0dev)", "Shapely (>=1.8.4,<2.0dev)", "ipython (>=7.0.1,!=8.1.0)", "tqdm (>=4.7.4,<5.0.0dev)", "opentelemetry-api (>=1.1.0)", "opentelemetry-sdk (>=1.1.0)", "opentelemetry-instrumentation (>=0.20b0)", "grpcio (>=1.49.1,<2.0dev)"]
 bqstorage = ["google-cloud-bigquery-storage (>=2.0.0,<3.0.0dev)", "grpcio (>=1.47.0,<2.0dev)", "pyarrow (>=3.0.0)", "grpcio (>=1.49.1,<2.0dev)"]
 geopandas = ["geopandas (>=0.9.0,<1.0dev)", "Shapely (>=1.8.4,<2.0dev)"]
 ipython = ["ipython (>=7.0.1,!=8.1.0)"]
-ipywidgets = ["ipywidgets (==7.7.1)"]
+ipywidgets = ["ipywidgets (>=7.7.0,<8.0.1)"]
 opentelemetry = ["opentelemetry-api (>=1.1.0)", "opentelemetry-sdk (>=1.1.0)", "opentelemetry-instrumentation (>=0.20b0)"]
 pandas = ["pandas (>=1.1.0)", "pyarrow (>=3.0.0)", "db-dtypes (>=0.3.0,<2.0.0dev)"]
 tqdm = ["tqdm (>=4.7.4,<5.0.0dev)"]
@@ -442,6 +442,17 @@ pydata-google-auth = ">=1.5.0"
 tqdm = ["tqdm (>=4.23.0)"]
 
 [[package]]
+name = "pipedrive-python-lib"
+version = "1.2.1"
+description = "API wrapper for Pipedrive written in Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+requests = "*"
+
+[[package]]
 name = "proto-plus"
 version = "1.22.2"
 description = "Beautiful, Pythonic protocol buffers."
@@ -604,7 +615,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "ef6cf15a659f0819542d8399807cd67750621768b21547ec64701c4accc7769a"
+content-hash = "41082285be64162b754c55f52ce60d5ce4bbb17ae9b6089dcfba22400132fa39"
 
 [metadata.files]
 aiohttp = []
@@ -641,6 +652,7 @@ oauthlib = []
 packaging = []
 pandas = []
 pandas-gbq = []
+pipedrive-python-lib = []
 proto-plus = []
 protobuf = []
 pyarrow = []

@@ -1,16 +1,20 @@
 import asyncio
 import os
 
+import pandas as pd
 import requests
 
-from data_pipeline_tools.headers import harvest_headers
 from data_pipeline_tools.asyncs import get_all_data
-from data_pipeline_tools.util import write_to_bigquery, flatten_columns
-
+from data_pipeline_tools.auth import harvest_headers
+from data_pipeline_tools.util import (
+    find_and_flatten_columns,
+    get_harvest_pages,
+    write_to_bigquery,
+)
 
 project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 if not project_id:
-    project_id = input("Enter GCP project ID: ")
+    project_id = "tpx-cheetah"
 
 
 def load_config(project_id, service) -> dict:
@@ -25,19 +29,6 @@ def load_config(project_id, service) -> dict:
     }
 
 
-def get_harvest_pages(url: str, headers: dict):
-    url = f"{url}1"
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
-        data = response.json()
-
-        return data["total_pages"], data["total_entries"]
-    except (requests.exceptions.RequestException, KeyError) as e:
-        print(f"Error retrieving total pages: {e}")
-        return None
-
-
 def main(data: dict, context):
     service = "Data Pipeline - Harvest Timesheets"
     config = load_config(project_id, service)
@@ -49,11 +40,13 @@ def main(data: dict, context):
             config["url"], config["headers"], pages, "time_entries", batch_size=10
         )
     ).reset_index(drop=True)
-    
-    df = flatten_columns(df)
+
+    df = find_and_flatten_columns(df)
+    df["spent_date"] = pd.to_datetime(df["spent_date"], format="%Y-%m-%d")
     print(len(df), entries)
     len(df) == entries
-    assert len(df) == entries
+
+    assert abs(len(df) == entries) < 30
     write_to_bigquery(config, df, "WRITE_TRUNCATE")
 
 

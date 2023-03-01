@@ -77,25 +77,21 @@ category = "main"
 optional = false
 python-versions = "*"
 
+
+
 [[package]]
-name = "data-pipeline-tools"
-version = "0.1"
-description = ""
+name = "db-dtypes"
+version = "1.0.5"
+description = "Pandas Data Types for SQL systems (BigQuery, Spanner)"
 category = "main"
 optional = false
-python-versions = "*"
-develop = false
+python-versions = ">=3.7"
 
 [package.dependencies]
-aiohttp = "*"
-google-cloud = "*"
-pandas = "*"
-
-[package.source]
-type = "git"
-url = "https://github.com/tpximpact/GCP-Data-Pipelines.git"
-reference = "main"
-resolved_reference = "132ad65b94cce9d8951e572e9d4ebcbad12854c8"
+numpy = ">=1.16.6,<2.0dev"
+packaging = ">=17.0"
+pandas = ">=0.24.2,<2.0dev"
+pyarrow = ">=3.0.0"
 
 [[package]]
 name = "frozenlist"
@@ -154,6 +150,21 @@ reauth = ["pyu2f (>=0.1.5)"]
 requests = ["requests (>=2.20.0,<3.0.0dev)"]
 
 [[package]]
+name = "google-auth-oauthlib"
+version = "1.0.0"
+description = "Google Authentication Library"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+google-auth = ">=2.15.0"
+requests-oauthlib = ">=0.7.0"
+
+[package.extras]
+tool = ["click (>=6.0.0)"]
+
+[[package]]
 name = "google-cloud"
 version = "0.34.0"
 description = "API Client library for Google Cloud"
@@ -192,6 +203,27 @@ ipywidgets = ["ipywidgets (==7.7.1)"]
 opentelemetry = ["opentelemetry-api (>=1.1.0)", "opentelemetry-sdk (>=1.1.0)", "opentelemetry-instrumentation (>=0.20b0)"]
 pandas = ["pandas (>=1.1.0)", "pyarrow (>=3.0.0)", "db-dtypes (>=0.3.0,<2.0.0dev)"]
 tqdm = ["tqdm (>=4.7.4,<5.0.0dev)"]
+
+[[package]]
+name = "google-cloud-bigquery-storage"
+version = "2.18.1"
+description = "Google Cloud Bigquery Storage API client library"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+google-api-core = {version = ">=1.34.0,<2.0.0 || >=2.11.0,<3.0.0dev", extras = ["grpc"]}
+proto-plus = [
+    {version = ">=1.22.0,<2.0.0dev", markers = "python_version < \"3.11\""},
+    {version = ">=1.22.2,<2.0.0dev", markers = "python_version >= \"3.11\""},
+]
+protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<5.0.0dev"
+
+[package.extras]
+fastavro = ["fastavro (>=0.21.2)"]
+pandas = ["pandas (>=0.21.1)"]
+pyarrow = ["pyarrow (>=0.15.0)"]
 
 [[package]]
 name = "google-cloud-core"
@@ -328,6 +360,19 @@ optional = false
 python-versions = ">=3.8"
 
 [[package]]
+name = "oauthlib"
+version = "3.2.2"
+description = "A generic, spec-compliant, thorough implementation of the OAuth request-signing logic"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+rsa = ["cryptography (>=3.0.0)"]
+signals = ["blinker (>=1.4.0)"]
+signedtoken = ["cryptography (>=3.0.0)", "pyjwt (>=2.0.0,<3)"]
+
+[[package]]
 name = "packaging"
 version = "23.0"
 description = "Core utilities for Python packages"
@@ -354,6 +399,29 @@ pytz = ">=2020.1"
 
 [package.extras]
 test = ["hypothesis (>=5.5.3)", "pytest (>=6.0)", "pytest-xdist (>=1.31)"]
+
+[[package]]
+name = "pandas-gbq"
+version = "0.19.1"
+description = "Google BigQuery connector for pandas"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+db-dtypes = ">=1.0.4,<2.0.0"
+google-api-core = ">=2.10.2,<3.0.0dev"
+google-auth = ">=2.13.0"
+google-auth-oauthlib = ">=0.7.0"
+google-cloud-bigquery = ">=3.3.5,<4.0.0dev"
+google-cloud-bigquery-storage = ">=2.16.2,<3.0.0dev"
+numpy = ">=1.16.6"
+pandas = ">=1.1.4"
+pyarrow = ">=3.0.0"
+pydata-google-auth = ">=1.5.0"
+
+[package.extras]
+tqdm = ["tqdm (>=4.23.0)"]
 
 [[package]]
 name = "proto-plus"
@@ -408,6 +476,18 @@ python-versions = "*"
 pyasn1 = ">=0.4.6,<0.5.0"
 
 [[package]]
+name = "pydata-google-auth"
+version = "1.7.0"
+description = "PyData helpers for authenticating to Google APIs"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+google-auth = {version = ">=1.25.0,<3.0dev", markers = "python_version >= \"3.6\""}
+google-auth-oauthlib = {version = ">=0.4.0", markers = "python_version >= \"3.6\""}
+
+[[package]]
 name = "python-dateutil"
 version = "2.8.2"
 description = "Extensions to the standard Python datetime module"
@@ -443,6 +523,21 @@ urllib3 = ">=1.21.1,<1.27"
 [package.extras]
 socks = ["PySocks (>=1.5.6,!=1.5.7)"]
 use_chardet_on_py3 = ["chardet (>=3.0.2,<6)"]
+
+[[package]]
+name = "requests-oauthlib"
+version = "1.3.1"
+description = "OAuthlib authentication support for Requests."
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+
+[package.dependencies]
+oauthlib = ">=3.0.0"
+requests = ">=2.0.0"
+
+[package.extras]
+rsa = ["oauthlib[signedtoken] (>=3.0.0)"]
 
 [[package]]
 name = "rsa"
@@ -491,7 +586,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "c68798d91d5d66b104eb5d39ea5278b692c2449d1e011cd5df827fcbdb6f987f"
+content-hash = "ef6cf15a659f0819542d8399807cd67750621768b21547ec64701c4accc7769a"
 
 [metadata.files]
 aiohttp = []
@@ -502,14 +597,17 @@ cachetools = []
 certifi = []
 charset-normalizer = []
 data-pipeline-tools = []
+db-dtypes = []
 frozenlist = []
 google-api-core = []
 google-auth = []
+google-auth-oauthlib = []
 google-cloud = [
     {file = "google-cloud-0.34.0.tar.gz", hash = "sha256:01430187cf56df10a9ba775dd547393185d4b40741db0ea5889301f8e7a9d5d3"},
     {file = "google_cloud-0.34.0-py2.py3-none-any.whl", hash = "sha256:fb1ab7b0548fe44b3d538041f0a374505b7f990d448a935ea36649c5ccab5acf"},
 ]
 google-cloud-bigquery = []
+google-cloud-bigquery-storage = []
 google-cloud-core = []
 google-cloud-secret-manager = []
 google-crc32c = []
@@ -521,8 +619,10 @@ grpcio-status = []
 idna = []
 multidict = []
 numpy = []
+oauthlib = []
 packaging = []
 pandas = []
+pandas-gbq = []
 proto-plus = []
 protobuf = []
 pyarrow = []
@@ -556,12 +656,14 @@ pyasn1-modules = [
     {file = "pyasn1_modules-0.2.8-py3.6.egg", hash = "sha256:cbac4bc38d117f2a49aeedec4407d23e8866ea4ac27ff2cf7fb3e5b570df19e0"},
     {file = "pyasn1_modules-0.2.8-py3.7.egg", hash = "sha256:c29a5e5cc7a3f05926aff34e097e84f8589cd790ce0ed41b67aed6857b26aafd"},
 ]
+pydata-google-auth = []
 python-dateutil = [
     {file = "python-dateutil-2.8.2.tar.gz", hash = "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"},
     {file = "python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
 ]
 pytz = []
 requests = []
+requests-oauthlib = []
 rsa = []
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
