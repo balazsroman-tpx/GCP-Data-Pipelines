@@ -139,3 +139,8 @@ def get_spent_dates(date):
     elif date.weekday() == 6:
         return date + timedelta(days=1)
     return date
+
+
+def unwrap_forecast_response(response: list) -> list:
+    # This function maps a response to a json list
+    return list(map(lambda item: item._json_data, response))
