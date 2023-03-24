@@ -13,6 +13,14 @@ def harvest_headers(project_id, service):
     }
 
 
+def hibob_headers(project_id, service):
+    return {
+        "accept": "application/json",
+        "Authorization": access_secret_version(project_id, "BOB_ACCESS_TOKEN"),
+        "service": service,
+    }
+
+
 def pipedrive_access_token(project_id):
     return access_secret_version(project_id, "PIPEDRIVE_ACCESS_TOKEN")
 
