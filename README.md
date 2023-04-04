@@ -5,7 +5,7 @@ This repository contains a suite of Python-based cloud functions that collect, p
 ## Features
 
 - Collection of 10-20 Python cloud functions
-- Integration with Highball, Harvest, Forecast, and Pipedrive APIs
+- Integration with HiBob, Harvest, Forecast, and Pipedrive APIs
 - Pricing package containing reusable functions used across the cloud functions
 - Deployment to Google Cloud with Terraform
 - Package management using Poetry (with requirements.txt export)
