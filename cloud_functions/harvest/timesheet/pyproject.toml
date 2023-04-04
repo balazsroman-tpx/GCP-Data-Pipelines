@@ -13,6 +13,10 @@ google-cloud-bigquery = "^3.5.0"
 google-cloud-secret-manager = "^2.15.1"
 pyarrow = "^11.0.0"
 pandas-gbq = "^0.19.1"
+pandas = "^1.5.3"
+pyforecast = { git = 'https://github.com/urquha/py_forecast', branch = "master" }
+holidays = "^0.21.13"
+
 [tool.poetry.dev-dependencies]
 
 [build-system]

@@ -1,8 +1,6 @@
 import asyncio
 import os
 
-import requests
-
 from data_pipeline_tools.asyncs import get_all_data
 from data_pipeline_tools.auth import harvest_headers
 from data_pipeline_tools.util import (
@@ -13,12 +11,12 @@ from data_pipeline_tools.util import (
 
 project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 if not project_id:
-    project_id = "tpx-cheetah"
+    project_id = input("Enter GCP project ID: ")
 
 
 def load_config(project_id, service) -> dict:
     return {
-        "url": "https://api.harvestapp.com/v2/tasks?page=",
+        "url": "https://api.harvestapp.com/v2/clients?page=",
         "headers": harvest_headers(project_id, service),
         "dataset_id": os.environ.get("DATASET_ID"),
         "gcp_project": project_id,
@@ -29,20 +27,17 @@ def load_config(project_id, service) -> dict:
 
 
 def main(data: dict, context):
-    service = "Data Pipeline - Harvest Users"
+    service = "Data Pipeline - Harvest Projects"
     config = load_config(project_id, service)
 
     pages, entries = get_harvest_pages(config["url"], config["headers"])
     print(f"Total pages: {pages}")
     df = asyncio.run(
-        get_all_data(config["url"], config["headers"], pages, "tasks", batch_size=10)
-    ).reset_index(drop=True)
+        get_all_data(config["url"], config["headers"], pages, "clients", batch_size=10)
+    )
     df = find_and_flatten_columns(df)
 
     assert len(df) == entries
-    import pdb
-
-    pdb.set_trace()
     write_to_bigquery(config, df, "WRITE_TRUNCATE")
 
 

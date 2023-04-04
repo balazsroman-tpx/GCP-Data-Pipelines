@@ -82,10 +82,21 @@ def main(data: dict, context):
     update_keys(
         deals, unnamed_columns["key"].to_list(), unnamed_columns["name"].to_list()
     )
-    deals_df = pd.DataFrame(deals).rename(columns=lambda x: x.replace(" ","_",).lower())
-    nested_columns = ["creator_user_id", "user_id", "org_id", "person_id",'bid_manager',
-            'person_id_email',
-            'person_id_phone',]
+    deals_df = pd.DataFrame(deals).rename(
+        columns=lambda x: x.replace(
+            " ",
+            "_",
+        ).lower()
+    )
+    nested_columns = [
+        "creator_user_id",
+        "user_id",
+        "org_id",
+        "person_id",
+        "bid_manager",
+        "person_id_email",
+        "person_id_phone",
+    ]
 
     flat_deals = flatten_columns(deals_df, nested_columns)
     flat_deals = flat_deals
@@ -102,7 +113,6 @@ def main(data: dict, context):
             "bid_clarifications_due_by_time",
             "timezone_of_bid_clarifications_due_by_time",
             "timezone_of_bid/proposal_deadline_time",
-            
         ]
     )
     print("Deal options updated")

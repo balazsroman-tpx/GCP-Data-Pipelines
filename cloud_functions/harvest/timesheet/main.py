@@ -2,7 +2,6 @@ import asyncio
 import os
 
 import pandas as pd
-import requests
 
 from data_pipeline_tools.asyncs import get_all_data
 from data_pipeline_tools.auth import harvest_headers
@@ -43,11 +42,23 @@ def main(data: dict, context):
 
     df = find_and_flatten_columns(df)
     df["spent_date"] = pd.to_datetime(df["spent_date"], format="%Y-%m-%d")
+    df["utilisation"] = df.apply(lambda row: get_utilisation(row), axis=1)
     print(len(df), entries)
     len(df) == entries
 
     assert abs(len(df) == entries) < 30
     write_to_bigquery(config, df, "WRITE_TRUNCATE")
+
+
+clients = ["TPXimpact", "TPX Engineering Academy", "TPX Engineering Team", "Panoply"]
+tasks = ["Account Development", "Travel Time"]
+
+
+def get_utilisation(row):
+    if row["client_name"] in clients or row["task_name"] in tasks:
+        return 0
+    else:
+        return row["hours"]
 
 
 if __name__ == "__main__":
