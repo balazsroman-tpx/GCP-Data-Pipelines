@@ -11,6 +11,7 @@ This repository contains a suite of Python-based cloud functions that collect, p
 - Package management using Poetry (with requirements.txt export)
 - Data storage in Google BigQuery with raw tables
 - Planned integration with Google Data Studio for report generation using SQL queries
+- CI/CD with cloud build will be coming
 
 ## Cloud Functions List
 
