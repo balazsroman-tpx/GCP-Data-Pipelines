@@ -74,6 +74,7 @@ def get_dates_list():
 
     # Get the current date
     current_date = datetime.now().date()
+    current_year = current_date.year
     if current_date.month < financial_year_start_month:
         current_year = current_date.year - 1
     months = (
