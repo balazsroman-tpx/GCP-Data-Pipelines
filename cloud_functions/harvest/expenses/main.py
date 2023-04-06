@@ -16,7 +16,7 @@ if not project_id:
 
 def load_config(project_id, service) -> dict:
     return {
-        "url": "https://api.harvestapp.com/v2/users?page=",
+        "url": "https://api.harvestapp.com/v2/expenses?page=",
         "headers": harvest_headers(project_id, service),
         "dataset_id": os.environ.get("DATASET_ID"),
         "gcp_project": project_id,
@@ -27,13 +27,14 @@ def load_config(project_id, service) -> dict:
 
 
 def main(data: dict, context):
-    service = "Data Pipeline - Harvest Users"
+    service = "Data Pipeline - Harvest Expenses"
     config = load_config(project_id, service)
 
     pages, entries = get_harvest_pages(config["url"], config["headers"])
+
     print(f"Total pages: {pages}")
     df = asyncio.run(
-        get_all_data(config["url"], config["headers"], pages, "users", batch_size=10)
+        get_all_data(config["url"], config["headers"], pages, "expenses", batch_size=10)
     ).reset_index(drop=True)
     df = find_and_flatten_columns(df)
 

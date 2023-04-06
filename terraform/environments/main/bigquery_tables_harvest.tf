@@ -92,3 +92,22 @@ resource "google_bigquery_table" "harvest_clients" {
     kms_key_name = data.google_kms_crypto_key.bigquery_key.id
   }
 }
+
+resource "google_bigquery_table" "harvest_expenses" {
+  dataset_id = google_bigquery_dataset.harvest_raw.dataset_id
+  table_id   = "expenses"
+
+  time_partitioning {
+    type = "DAY"
+  }
+
+  labels = {
+    env = var.env
+  }
+
+  deletion_protection = false
+
+  encryption_configuration {
+    kms_key_name = data.google_kms_crypto_key.bigquery_key.id
+  }
+}

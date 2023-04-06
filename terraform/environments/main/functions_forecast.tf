@@ -66,7 +66,7 @@ resource "google_storage_bucket_object" "forecast_assignments_filled" {
 resource "google_cloudfunctions_function" "forecast_assignments_filled" {
   name                = "forecast_assignments_filled_pipe"
   runtime             = "python310" # of course changeable
-  available_memory_mb = 512
+  available_memory_mb = 1024
   timeout             = 540
   # Get the source code of the cloud function as a Zip compression
   source_archive_bucket = data.google_storage_bucket.function_bucket.name
