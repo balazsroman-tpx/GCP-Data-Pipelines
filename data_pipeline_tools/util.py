@@ -1,7 +1,5 @@
 import json
-from datetime import datetime, timedelta
 
-import holidays
 import pandas as pd
 import pandas_gbq
 import requests
@@ -113,32 +111,6 @@ def get_harvest_pages(url: str, headers: dict):
     except (requests.exceptions.RequestException, KeyError) as e:
         print(f"Error retrieving total pages: {e}")
         return None
-
-
-def get_uk_holidays(year=datetime.now().year):
-    print("Getting UK holidays")
-    holidays_resp = list(
-        map(
-            lambda date: {"date": date[0], "name": date[1]},
-            holidays.UK(years=year).items(),
-        )
-    )
-    holidays_df = pd.DataFrame(holidays_resp).sort_values("date").reset_index(drop=True)
-    holidays_df["spent_date"] = holidays_df["date"].apply(
-        lambda date: get_spent_dates(date)
-    )
-    return holidays_df[
-        ~holidays_df["name"].str.contains(r"\[Scotland\]")
-        & ~holidays_df["name"].str.contains(r"\[Northern Ireland\]")
-    ]
-
-
-def get_spent_dates(date):
-    if date.weekday() == 5:
-        return date + timedelta(days=2)
-    elif date.weekday() == 6:
-        return date + timedelta(days=1)
-    return date
 
 
 def unwrap_forecast_response(response: list) -> list:
