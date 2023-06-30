@@ -24,7 +24,10 @@ def read_from_bigquery(project_id: str, query: str) -> pd.DataFrame:
     # Load the credentials from the service account JSON file
     credentials_info = json.loads(service_account_json(project_id))
     credentials = service_account.Credentials.from_service_account_info(
-        credentials_info, scopes=["https://www.googleapis.com/auth/bigquery"]
+        credentials_info, scopes=["https://www.googleapis.com/auth/bigquery", 
+                                  "https://www.googleapis.com/auth/spreadsheets",
+                                  "https://www.googleapis.com/auth/drive"
+                                  ]
     )
 
     # Read the data from the BigQuery table and return it as a DataFrame
