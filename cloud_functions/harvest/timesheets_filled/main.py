@@ -22,32 +22,31 @@ def load_config(project_id, service) -> dict:
 
 
 def main(data: dict, context: dict = None):
-    service = "Data Pipeline - Forecast Assignments Filled"
+    service = "Data Pipeline - Harvest Timesheets Filled"
     config = load_config(project_id, service)
     days = get_dates_list()
     print(days[0], "-", days[-1])
 
     QUERY = f"""
-    SELECT * FROM `tpx-cheetah.Forecast_Raw.assignments`
-    WHERE DATE(start_date) > "2022-03-31"
-    AND DATE(start_date) < "2024-03-31"
+    SELECT * FROM `tpx-cheetah.Harvest_Raw.timesheets`
+    WHERE DATE(spent_date) > "2022-03-31"
+    AND DATE(spent_date) < "2024-03-31"
     """
     df = read_from_bigquery(project_id, QUERY)
-    Q2 = f"""SELECT id FROM `tpx-cheetah.Forecast_Raw.people`
-    WHERE archived = false"""
-    people_df = read_from_bigquery(project_id, Q2)
+    Q2 = f"""SELECT id FROM `tpx-cheetah.Harvest_Raw.users`
+    WHERE is_active = false"""
+    users_df = read_from_bigquery(project_id, Q2)
 
-    entries = []
-    for person_id in people_df["id"].to_list():
+    for person_id in users_df["id"].to_list():
         temp_df = df[df["person_id"] == person_id]
-        already_filled_dates = temp_df["start_date"].to_list()
+        already_filled_dates = temp_df["spent_date"].to_list()
         blank_dates = [x for x in days if x not in already_filled_dates]
-
-        for day in blank_dates:
-            entries.append(
-                {
+        entries = list(
+            map(
+            lambda day:
+                [{
                     "id": random.randint(100000000, 999999999),
-                    "start_date": day,
+                    "spent_date": day,
                     "end_date": day,
                     "allocation": 14400.0,
                     "notes": None,
@@ -59,8 +58,10 @@ def main(data: dict, context: dict = None):
                     "active_on_days_off": False,
                     "hours": 8.0,
                     "days": 1,
-                }
+                },{'id': 1770259615, 'spent_date':day, 'hours': 1.0, 'hours_without_timer': 1.0, 'rounded_hours': 1.0, 'notes': None, 'is_locked': True, 'locked_reason': 'Item Archived', 'is_closed': False, 'is_billed': False, 'timer_started_at': None, 'started_time': None, 'ended_time': None, 'is_running': False, 'billable': False, 'budgeted': False, 'billable_rate': nan, 'cost_rate': 34.55, 'created_at': '2022-04-27T11:56:40Z', 'updated_at': '2022-12-09T10:51:52Z', 'invoice': None, 'external_reference': None, 'user_id': 2989713, 'user_name': 'Joseph Curle', 'client_id': 11945933, 'client_name': 'TPXimpact', 'client_currency': 'GBP', 'project_id': 8949317, 'project_name': 'Sales - Proposals, bids', 'project_code': 'Business Development', 'task_id': 3707315, 'task_name': 'Billable', 'user_assignment_id': 346479860, 'user_assignment_is_project_manager': False, 'user_assignment_is_active': False, 'user_assignment_use_default_rates': False, 'user_assignment_budget': nan, 'user_assignment_created_at': '2022-05-12T13:32:42Z', 'user_assignment_updated_at': '2022-12-09T10:51:52Z', 'user_assignment_hourly_rate': 0.0, 'task_assignment_id': 97552265, 'task_assignment_billable': False, 'task_assignment_is_active': False, 'task_assignment_created_at': '2015-09-23T10:55:57Z', 'task_assignment_updated_at': '2016-03-01T18:15:14Z', 'task_assignment_hourly_rate': 0.0, 'task_assignment_budget': nan, 'utilisation': 0.0}], blank_dates
             )
+        )
+        
 
     final_df = pd.concat([df, pd.DataFrame(entries)])
     write_to_bigquery(config, final_df, "WRITE_TRUNCATE")

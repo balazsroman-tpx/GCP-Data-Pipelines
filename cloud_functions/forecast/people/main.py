@@ -35,9 +35,9 @@ def main(data: dict, context: dict = None):
     )
     people_df["weekly_capacity"] = people_df["weekly_capacity"] / (3600 * 8)
 
-    people_df["external"] = people_df["roles"].apply(lambda row: "external" in row)
+    people_df["external"] = people_df["roles"].apply(lambda row: "associate" in row)
 
-    people_df["role"] = people_df["roles"].apply(lambda row: get_role(row))
+    # people_df["role"] = people_df["roles"].apply(lambda row: get_role(row))
     write_to_bigquery(config, people_df, "WRITE_TRUNCATE")
     print("Done")
 

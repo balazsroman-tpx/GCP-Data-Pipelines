@@ -44,8 +44,7 @@ def main(data: dict, context):
     df["spent_date"] = pd.to_datetime(df["spent_date"], format="%Y-%m-%d")
     df["utilisation"] = df.apply(lambda row: get_utilisation(row), axis=1)
     print(len(df), entries)
-    len(df) == entries
-
+    
     assert abs(len(df) == entries) < 30
     write_to_bigquery(config, df, "WRITE_TRUNCATE")
 

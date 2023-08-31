@@ -1,13 +1,11 @@
 [tool.poetry]
-name = "assignments-filled"
+name = "projects"
 version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
-readme = "README.md"
-packages = [{include = "assignments_filled"}]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.9"
 requests = "^2.28.2"
 google-cloud-core = "^2.3.2"
 google-cloud-bigquery = "^3.5.0"
@@ -17,7 +15,10 @@ pandas-gbq = "^0.19.1"
 pyforecast = { git = 'https://github.com/urquha/py_forecast', branch = "master" }
 holidays = "^0.20"
 data_pipeline_tools = { git = "https://github.com/tpximpact/GCP-Data-Pipelines.git", branch = "main" }
+pandas = "^1.5.3"
+
+[tool.poetry.dev-dependencies]
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"

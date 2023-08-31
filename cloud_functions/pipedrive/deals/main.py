@@ -65,7 +65,7 @@ def main(data: dict, context):
 
     print("Deals retrieved")
 
-    deal_fields_resp = client.deals.get_deal_fields()["data"]
+    deal_fields_resp = client.deals.get_deal_fields()["data"] + client.deals.get_deal_fields(params={"start": 100})["data"]
     column_names = pd.DataFrame(
         [
             {

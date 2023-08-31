@@ -3,7 +3,7 @@ import pandas as pd
 import os
 from datetime import datetime, timedelta
 
-from data_pipeline_tools.auth import forecast_client
+from data_pipeline_tools.forecast_tools import forecast_client
 from data_pipeline_tools.util import unwrap_forecast_response, write_to_bigquery
 
 
@@ -31,7 +31,7 @@ def main(data: dict, context: dict = None):
 
     assignments_list = []
     while start_date < datetime.today() + timedelta(days=800):
-        end_date = start_date + timedelta(days=180)
+        end_date = start_date + timedelta(days=179)
         assignments_resp = unwrap_forecast_response(
             client.get_assignments(
                 start_date=start_date.strftime("%Y-%m-%d"),
@@ -59,7 +59,6 @@ def main(data: dict, context: dict = None):
     # ].head()
     write_to_bigquery(config, forecast_assignment_data, "WRITE_TRUNCATE")
     print("Done")
-
 
 def expand_assignments_rows(df):
     # When an assignment is entered, it can be put in for a single day or multiple.

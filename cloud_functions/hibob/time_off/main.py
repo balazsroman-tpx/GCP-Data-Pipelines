@@ -34,13 +34,10 @@ def get_holidays(config: dict, client: httpx.Client):
     end_timestamp = (datetime.now() + timedelta(days=10000)).strftime("%Y-%m-%d")
 
     url = f"https://api.hibob.com/v1/timeoff/whosout?from={start_timestamp}&to={end_timestamp}&includeHourly=false&includePrivate=false"
-    df = expand_holidays_rows(
-        pd.DataFrame(
-            json.loads(client.get(url, headers=config["headers"], timeout=None).text)[
-                "outs"
-            ]
-        )
-    )
+
+    resp = json.loads(client.get(url, headers=config["headers"], timeout=None).text)
+
+    df = expand_holidays_rows(pd.DataFrame(resp["outs"]))
 
     df["holiday_hours"] = df.apply(lambda row: find_hours(row), axis=1)
     df["holiday_days"] = df["holiday_hours"] / 8
@@ -62,7 +59,7 @@ def expand_holidays_rows(df):
     single_assignment_rows = df[df["startDate"] == df["endDate"]]
     edited_rows = []
 
-    for index, row in rows_to_edit.iterrows():
+    for _, row in rows_to_edit.iterrows():
         # get the times
         end_date = datetime.strptime(row["endDate"], "%Y-%m-%d")
         start_date = datetime.strptime(row["startDate"], "%Y-%m-%d")
@@ -97,17 +94,7 @@ def change_holidays_columns(df):
     df["entry_type"] = "holiday"
     df["project_id"] = 509809
 
-    return df.drop(
-        [
-            "policyTypeDisplayName",
-            "policyType",
-            "startPortion",
-            "employeeId",
-            "endPortion",
-            "status",
-        ],
-        axis=1,
-    ).rename(
+    return df.drop(["startPortion", "endPortion",], axis=1,).rename(
         columns={
             "endDate": "end_date",
             "startDate": "start_date",

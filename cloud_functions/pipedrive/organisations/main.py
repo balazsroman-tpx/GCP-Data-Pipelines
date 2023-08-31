@@ -15,7 +15,8 @@ if not project_id:
 def update_keys(dict_list, keys_to_update, new_keys):
     for dictionary in dict_list:
         for old_key, new_key in zip(keys_to_update, new_keys):
-            dictionary[new_key.replace(" ", " ").lower()] = dictionary.pop(old_key)
+            if old_key in dictionary.keys():
+                dictionary[new_key.replace(" ", " ").lower()] = dictionary.pop(old_key)
     return dict_list
 
 
