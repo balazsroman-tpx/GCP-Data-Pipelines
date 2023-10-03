@@ -42,6 +42,10 @@ def main(data: dict, context):
     df = find_and_flatten_columns(df)
 
     assert len(df) == entries
+    
+    columns_to_drop = []
+    df = df.drop(columns=columns_to_drop, errors="ignore")
+    
     write_to_bigquery(config, df, "WRITE_TRUNCATE")
 
 

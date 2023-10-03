@@ -31,6 +31,9 @@ def main(data: dict, context: dict = None):
 
     artificial_projects_df = get_artificial_projects()
     final_df = pd.concat([projects_df, artificial_projects_df], ignore_index=True)
+    
+    columns_to_drop = []
+    final_df = final_df.drop(columns=columns_to_drop, errors="ignore")
 
     write_to_bigquery(config, final_df, "WRITE_TRUNCATE")
     print("Done")

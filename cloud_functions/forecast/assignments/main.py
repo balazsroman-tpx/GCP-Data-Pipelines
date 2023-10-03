@@ -54,9 +54,10 @@ def main(data: dict, context: dict = None):
         )
         forecast_assignment_data["days"] = forecast_assignment_data["hours"] / 8
 
-    # assignments_df = assignments_df[
-    #     assignments_df["start_date"] != assignments_df["end_date"]
-    # ].head()
+    columns_to_drop = []
+    forecast_assignment_data = forecast_assignment_data.drop(
+        columns=columns_to_drop, errors="ignore"
+    )
     write_to_bigquery(config, forecast_assignment_data, "WRITE_TRUNCATE")
     print("Done")
 

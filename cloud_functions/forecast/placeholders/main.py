@@ -28,6 +28,8 @@ def main(data: dict, context: dict = None):
 
     placeholders_df = pd.DataFrame(placeholders_resp)
 
+    columns_to_drop = []
+    placeholders_df = placeholders_df.drop(columns=columns_to_drop, errors="ignore")
     write_to_bigquery(config, placeholders_df, "WRITE_TRUNCATE")
     print("Done")
 

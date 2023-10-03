@@ -101,6 +101,9 @@ def main(data: dict, context: dict = None):
             item["name"].replace(" ", "_").lower()
         ].apply(lambda x: get_option_from_key(x, pd.DataFrame(item["options"])))
 
+    columns_to_drop = []
+    orgs_df = orgs_df.drop(columns=columns_to_drop, errors="ignore")
+    
     write_to_bigquery(config, orgs_df, "WRITE_TRUNCATE")
 
 

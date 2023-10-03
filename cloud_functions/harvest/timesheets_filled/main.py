@@ -64,6 +64,9 @@ def main(data: dict, context: dict = None):
         
 
     final_df = pd.concat([df, pd.DataFrame(entries)])
+    columns_to_drop = []
+    final_df = final_df.drop(columns=columns_to_drop, errors="ignore")
+    
     write_to_bigquery(config, final_df, "WRITE_TRUNCATE")
 
 

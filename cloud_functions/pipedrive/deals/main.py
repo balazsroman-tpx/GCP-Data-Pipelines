@@ -116,7 +116,9 @@ def main(data: dict, context):
         ]
     )
     print("Deal options updated")
-
+    columns_to_drop = []
+    flat_deals = flat_deals.drop(columns=columns_to_drop, errors="ignore")
+    
     write_to_bigquery(config, flat_deals, "WRITE_TRUNCATE")
 
 
