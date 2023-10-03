@@ -28,6 +28,17 @@ module "bigquery_scheduled_queries" {
         write_disposition               = "WRITE_TRUNCATE"
         query                           = file("${path.module}/queries/harvest_processed_master.sql")
       }
+    },
+    {
+      name                   = "harvest_processed2"
+      location               = "europe-west2"
+      data_source_id         = "scheduled_query"
+      destination_dataset_id = google_bigquery_dataset.harvest_processed.dataset_id
+      params = {
+        destination_table_name_template = "harvest_processed2"
+        write_disposition               = "WRITE_TRUNCATE"
+        query                           = file("${path.module}/queries/harvest_processed_master2.sql")
+      }
     }
   ]
 }
