@@ -28,12 +28,12 @@ def main(data: dict, context: dict = None):
     print(days[0], "-", days[-1])
 
     QUERY = f"""
-    SELECT * FROM `tpx-cheetah.Forecast_Raw.assignments`
+    SELECT * FROM `{config['gcp_project']}.Forecast_Raw.assignments`
     WHERE DATE(start_date) > "2022-03-31"
     AND DATE(start_date) < "2024-03-31"
     """
     df = read_from_bigquery(project_id, QUERY)
-    Q2 = f"""SELECT id FROM `tpx-cheetah.Forecast_Raw.people`
+    Q2 = f"""SELECT id FROM `{config['gcp_project']}.Forecast_Raw.people`
     WHERE archived = false"""
     people_df = read_from_bigquery(project_id, Q2)
 

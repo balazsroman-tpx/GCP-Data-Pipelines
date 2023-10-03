@@ -13,7 +13,7 @@ from data_pipeline_tools.util import (
 
 project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 if not project_id:
-    project_id = "tpx-cheetah"
+    project_id = "tpx-consulting-dashboards"
 
 
 def load_config(project_id, service) -> dict:

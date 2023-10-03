@@ -13,7 +13,7 @@ resource "google_bigquery_table" "time_off" {
   deletion_protection = false
 
   encryption_configuration {
-    kms_key_name = data.google_kms_crypto_key.bigquery_key.id
+    kms_key_name = google_kms_crypto_key.bigquery_key.id
   }
 }
 

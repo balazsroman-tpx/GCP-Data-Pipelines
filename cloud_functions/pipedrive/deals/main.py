@@ -9,7 +9,7 @@ from data_pipeline_tools.util import flatten_columns, write_to_bigquery
 project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 if not project_id:
     # project_id = input("Enter GCP project ID: ")
-    project_id = "tpx-cheetah"
+    project_id = "tpx-consulting-dashboards"
 
 
 def update_keys(dict_list, keys_to_update, new_keys):

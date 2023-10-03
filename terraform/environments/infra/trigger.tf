@@ -1,16 +1,6 @@
-data "google_kms_key_ring" "pub_sub_key_ring" {
-  name     = "forecast_sheets-pub_sub_key-ring"
-  location = "europe-west2"
-}
-
-data "google_kms_crypto_key" "pub_sub_key" {
-  name     = "forecast_sheets-pub_sub"
-  key_ring = data.google_kms_key_ring.pub_sub_key_ring.id
-}
-
 resource "google_pubsub_topic" "cloud_function_trigger_cold" {
   name         = "cloud-function-trigger-cold"
-  kms_key_name = data.google_kms_crypto_key.pub_sub_key.id
+  kms_key_name = google_kms_crypto_key.pub_sub_key.id
 
 }
 
@@ -28,7 +18,7 @@ resource "google_cloud_scheduler_job" "daily-5-45" {
 
 resource "google_pubsub_topic" "cloud_function_trigger_hot" {
   name         = "cloud-function-trigger-hot"
-  kms_key_name = data.google_kms_crypto_key.pub_sub_key.id
+  kms_key_name = google_kms_crypto_key.pub_sub_key.id
 }
 
 resource "google_cloud_scheduler_job" "two-hourly-00" {
@@ -45,7 +35,7 @@ resource "google_cloud_scheduler_job" "two-hourly-00" {
 
 resource "google_pubsub_topic" "cloud_function_trigger_hot_2" {
   name         = "cloud-function-trigger-hot-2"
-  kms_key_name = data.google_kms_crypto_key.pub_sub_key.id
+  kms_key_name = google_kms_crypto_key.pub_sub_key.id
 }
 
 resource "google_cloud_scheduler_job" "two-hourly-15" {

@@ -28,12 +28,12 @@ def main(data: dict, context: dict = None):
     print(days[0], "-", days[-1])
 
     QUERY = f"""
-    SELECT * FROM `tpx-cheetah.Harvest_Raw.timesheets`
+    SELECT * FROM `{config['gcp_project']}.Harvest_Raw.timesheets`
     WHERE DATE(spent_date) > "2022-03-31"
     AND DATE(spent_date) < "2024-03-31"
     """
     df = read_from_bigquery(project_id, QUERY)
-    Q2 = f"""SELECT id FROM `tpx-cheetah.Harvest_Raw.users`
+    Q2 = f"""SELECT id FROM `{config['gcp_project']}.Harvest_Raw.users`
     WHERE is_active = false"""
     users_df = read_from_bigquery(project_id, Q2)
 

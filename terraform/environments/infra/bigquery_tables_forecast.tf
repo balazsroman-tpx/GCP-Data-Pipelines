@@ -13,7 +13,7 @@ resource "google_bigquery_table" "forecast_people" {
   deletion_protection = false
 
   encryption_configuration {
-    kms_key_name = data.google_kms_crypto_key.bigquery_key.id
+    kms_key_name = google_kms_crypto_key.bigquery_key.id
   }
 }
 
@@ -32,7 +32,7 @@ resource "google_bigquery_table" "forecast_assignments" {
   deletion_protection = false
 
   encryption_configuration {
-    kms_key_name = data.google_kms_crypto_key.bigquery_key.id
+    kms_key_name = google_kms_crypto_key.bigquery_key.id
   }
 }
 
@@ -51,7 +51,7 @@ resource "google_bigquery_table" "forecast_assignments_filled" {
   deletion_protection = false
 
   encryption_configuration {
-    kms_key_name = data.google_kms_crypto_key.bigquery_key.id
+    kms_key_name = google_kms_crypto_key.bigquery_key.id
   }
 }
 
@@ -70,6 +70,26 @@ resource "google_bigquery_table" "forecast_projects" {
   deletion_protection = false
 
   encryption_configuration {
-    kms_key_name = data.google_kms_crypto_key.bigquery_key.id
+    kms_key_name = google_kms_crypto_key.bigquery_key.id
+  }
+}
+
+
+resource "google_bigquery_table" "forecast_placeholders" {
+  dataset_id = google_bigquery_dataset.forecast_raw.dataset_id
+  table_id   = "placeholders"
+
+  time_partitioning {
+    type = "DAY"
+  }
+
+  labels = {
+    env = var.env
+  }
+
+  deletion_protection = false
+
+  encryption_configuration {
+    kms_key_name = google_kms_crypto_key.bigquery_key.id
   }
 }

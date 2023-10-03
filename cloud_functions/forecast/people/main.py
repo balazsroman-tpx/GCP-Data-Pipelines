@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 sys.path.insert(0, "../../..")
-from data_pipeline_tools.auth import forecast_client
+from data_pipeline_tools.forecast_tools import forecast_client
 from data_pipeline_tools.util import unwrap_forecast_response, write_to_bigquery
 
 

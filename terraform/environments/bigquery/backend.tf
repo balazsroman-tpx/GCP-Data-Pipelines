@@ -1,7 +1,7 @@
 terraform {
 
   backend "gcs" {
-    bucket = "tpx-cheetah-data-pipelines-tf-state-prod"
+    bucket = "tpx-consulting-dashboards-bigquery-tf-state-prod"
     prefix = "terraform/state"
   }
 

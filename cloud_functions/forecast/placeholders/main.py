@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-from data_pipeline_tools.auth import forecast_client
+from data_pipeline_tools.forecast_tools import forecast_client
 from data_pipeline_tools.util import unwrap_forecast_response, write_to_bigquery
 
 
