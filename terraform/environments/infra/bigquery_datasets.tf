@@ -79,18 +79,6 @@ resource "google_bigquery_dataset" "hibob_processed" {
   }
 }
 
-resource "google_bigquery_dataset" "gsheets_input" {
-  dataset_id  = "GSheets_Input"
-  description = "Dataset for Google sheets input"
-  location    = "europe-west2"
-
-  labels = {
-    env = var.env
-  }
-  default_encryption_configuration {
-    kms_key_name = google_kms_crypto_key.bigquery_key.id
-  }
-}
 
 resource "google_bigquery_dataset" "helper_tables" {
   # Work out what this is for
@@ -108,8 +96,8 @@ resource "google_bigquery_dataset" "helper_tables" {
 
 resource "google_bigquery_dataset" "invoices" {
   # Work out what this is for
-  dataset_id  = "Invoices"
-  description = "Dataset for invoices parsed by Document AI"
+  dataset_id  = "Variable_Data_Input"
+  description = "Dataset for google sheets input"
   location    = "europe-west2"
 
   labels = {
