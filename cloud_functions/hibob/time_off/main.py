@@ -94,7 +94,13 @@ def change_holidays_columns(df):
     df["entry_type"] = "holiday"
     df["project_id"] = 509809
 
-    return df.drop(["startPortion", "endPortion",], axis=1,).rename(
+    return df.drop(
+        [
+            "startPortion",
+            "endPortion",
+        ],
+        axis=1,
+    ).rename(
         columns={
             "endDate": "end_date",
             "startDate": "start_date",

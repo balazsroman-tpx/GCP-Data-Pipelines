@@ -44,11 +44,11 @@ def main(data: dict, context):
     df["spent_date"] = pd.to_datetime(df["spent_date"], format="%Y-%m-%d")
     df["utilisation"] = df.apply(lambda row: get_utilisation(row), axis=1)
     print(len(df), entries)
-    
+
     assert abs(len(df) == entries) < 30
     columns_to_drop = []
     df = df.drop(columns=columns_to_drop, errors="ignore")
-    
+
     write_to_bigquery(config, df, "WRITE_TRUNCATE")
 
 

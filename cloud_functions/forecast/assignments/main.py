@@ -61,6 +61,7 @@ def main(data: dict, context: dict = None):
     write_to_bigquery(config, forecast_assignment_data, "WRITE_TRUNCATE")
     print("Done")
 
+
 def expand_assignments_rows(df):
     # When an assignment is entered, it can be put in for a single day or multiple.
     # For entries spanning across multiple days, this function converts to single day entries and returns the dataframe.

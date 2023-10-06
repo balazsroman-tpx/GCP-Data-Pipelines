@@ -1,7 +1,7 @@
 import os
 from data_pipeline_tools.util import write_to_bigquery, read_from_bigquery
+from data_pipeline_tools.holidays import get_uk_holidays
 from datetime import datetime
-import random
 import pandas as pd
 import calendar
 
@@ -24,13 +24,26 @@ def load_config(project_id, service) -> dict:
 def main(data: dict, context: dict = None):
     service = "Data Pipeline - Forecast Assignments Filled"
     config = load_config(project_id, service)
-    days = get_dates_list()
+    year = datetime.now().year
+    month = datetime.now().month
+
+    if month < 4: 
+        year -= 1    
+    
+    bank_holidays = [
+        date.strftime('%Y-%m-%d') 
+        for year in range(2022, year+2) 
+        for date in get_uk_holidays(year)['spent_date']
+    ]  
+    
+    days = list(set(get_dates_list()) - set(bank_holidays))
     print(days[0], "-", days[-1])
 
+        
     QUERY = f"""
     SELECT * FROM `{config['gcp_project']}.Forecast_Raw.assignments`
     WHERE DATE(start_date) > "2022-03-31"
-    AND DATE(start_date) < "2024-03-31"
+    AND DATE(start_date) < "{year+2}-03-31"
     """
     df = read_from_bigquery(project_id, QUERY)
     Q2 = f"""SELECT id FROM `{config['gcp_project']}.Forecast_Raw.people`
@@ -43,10 +56,10 @@ def main(data: dict, context: dict = None):
         already_filled_dates = temp_df["start_date"].to_list()
         blank_dates = [x for x in days if x not in already_filled_dates]
 
-        for day in blank_dates:
+        for index, day in enumerate(blank_dates):
             entries.append(
                 {
-                    "id": random.randint(100000000, 999999999),
+                    "id": index,
                     "start_date": day,
                     "end_date": day,
                     "allocation": 14400.0,
@@ -83,6 +96,7 @@ def get_dates_list():
     days = []
     for month in months:
         days += get_weekdays(month.year, month.month)
+    
     return days
 
 
@@ -107,7 +121,6 @@ def get_weekdays(year, month):
     # Generate a list of all the weekdays in the month
 
     for days in range(first_day, num_days + 1, 7):
-
         weekdays.extend(
             [
                 datetime(year, month, day).strftime("%Y-%m-%d")

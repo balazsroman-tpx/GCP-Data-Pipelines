@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 import holidays
 
+
 def get_uk_holidays(year=datetime.now().year):
     print("Getting UK holidays")
     holidays_resp = list(
@@ -18,6 +19,7 @@ def get_uk_holidays(year=datetime.now().year):
         ~holidays_df["name"].str.contains(r"\[Scotland\]")
         & ~holidays_df["name"].str.contains(r"\[Northern Ireland\]")
     ]
+
 
 def get_spent_dates(date):
     if date.weekday() == 5:

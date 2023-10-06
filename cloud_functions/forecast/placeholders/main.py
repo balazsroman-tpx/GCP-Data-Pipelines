@@ -34,8 +34,5 @@ def main(data: dict, context: dict = None):
     print("Done")
 
 
-
-
-
 if __name__ == "__main__":
     main({})

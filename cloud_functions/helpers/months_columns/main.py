@@ -27,8 +27,8 @@ def main(data: dict, context):
 
     write_to_bigquery(config, df, "WRITE_TRUNCATE")
 
-def get_financial_year_months_df():
 
+def get_financial_year_months_df():
     # current date
     now = datetime.now()
 
@@ -47,11 +47,12 @@ def get_financial_year_months_df():
     # generate column names for each month from the start of the current financial year to the end of the next financial year
     current_date = start_date
     while current_date <= end_date:
-        columns.append(current_date.strftime('%Y-%m'))
+        columns.append(current_date.strftime("%Y-%m"))
         current_date += relativedelta(months=1)
 
     # create an empty DataFrame with the generated column names
     return pd.DataFrame(columns=columns)
+
 
 if __name__ == "__main__":
     main({}, None)

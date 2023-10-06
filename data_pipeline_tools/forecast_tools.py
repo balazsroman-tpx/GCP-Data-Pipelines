@@ -1,6 +1,6 @@
 import forecast
 
-from  data_pipeline_tools.auth import access_secret_version
+from data_pipeline_tools.auth import access_secret_version
 
 
 def forecast_client(project_id):

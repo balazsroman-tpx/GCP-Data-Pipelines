@@ -94,7 +94,7 @@ def main(data: dict, context: dict = None):
             " ",
             "_",
         ).lower()
-    ) 
+    )
     for _, item in optioned_columns.iterrows():
         print(item["name"])
         orgs_df[item["name"].replace(" ", "_").lower()] = orgs_df[
@@ -103,7 +103,7 @@ def main(data: dict, context: dict = None):
 
     columns_to_drop = []
     orgs_df = orgs_df.drop(columns=columns_to_drop, errors="ignore")
-    
+
     write_to_bigquery(config, orgs_df, "WRITE_TRUNCATE")
 
 
