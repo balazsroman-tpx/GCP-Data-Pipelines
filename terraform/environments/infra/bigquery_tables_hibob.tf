@@ -17,3 +17,6 @@ resource "google_bigquery_table" "time_off" {
   }
 }
 
+resource "google_bigquery_table" "people" {
+  
+}
