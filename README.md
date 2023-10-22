@@ -27,8 +27,9 @@ The following is a list of cloud functions with "pipe" in their name:
 8. harvest_user_project_assignments_pipe
 9. harvest_users_pipe
 10. hibob_time_off_pipe
-11. pipedrive_deals_pipe
-12. pipedrive_organisations_pipe
+11. hibob_people_pipe
+12. pipedrive_deals_pipe
+13. pipedrive_organisations_pipe
 
 These cloud functions are part of the HR Data Integration and Reporting system and are responsible for processing data from various APIs.
 
