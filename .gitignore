@@ -129,4 +129,9 @@ dmypy.json
 .pyre/
 *.terraform
 .terraform*
+
+# txts (requests.txt)
 *.txt
+
+# macos
+.DS_Store
