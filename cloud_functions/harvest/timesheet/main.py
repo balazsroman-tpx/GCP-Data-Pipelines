@@ -52,7 +52,7 @@ def main(data: dict, context):
     write_to_bigquery(config, df, "WRITE_TRUNCATE")
 
 
-clients = ["TPXimpact", "TPX Engineering Academy", "TPX Engineering Team", "Panoply"]
+clients = ["TPXimpact", "TPX Engineering Academy", "TPX Engineering Team", "Panoply", "TPXimpact D&I"]
 tasks = ["Account Development", "Travel Time"]
 
 
