@@ -115,7 +115,7 @@ def get_harvest_pages(url: str, headers: dict):
         return data["total_pages"], data["total_entries"]
     except (requests.exceptions.RequestException, KeyError) as e:
         print(f"Error retrieving total pages: {e}")
-        return None
+        return None, None
 
 
 def unwrap_forecast_response(response: list) -> list:
