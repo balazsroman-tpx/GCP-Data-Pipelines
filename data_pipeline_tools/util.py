@@ -110,6 +110,7 @@ def get_harvest_pages(url: str, headers: dict):
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
+        print(response.status_code)
         data = response.json()
 
         return data["total_pages"], data["total_entries"]
