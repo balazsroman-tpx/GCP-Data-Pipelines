@@ -44,17 +44,19 @@ def main(data: dict, context):
     df["ends_on"] = df["ends_on"].apply(
         lambda x: datetime.strptime(x, "%Y-%m-%d").date() if x else None
     )
-    df["completion_percentage"] = df.apply(
-        lambda row: None
-        if row["ends_on"] is None
-        else 1
-        if row["ends_on"] < datetime.now().date()
-        else 0
-        if row["starts_on"] > datetime.now().date()
-        else (datetime.now().date() - row["starts_on"])
-        / (row["ends_on"] - row["starts_on"]),
-        axis=1,
-    )
+    # commented out as breaking...
+    # df["completion_percentage"] = df.apply(
+    #     lambda row: None
+    #     if row["ends_on"] is None
+    #     else 1
+    #     if row["ends_on"] < datetime.now().date()
+    #     else 0
+    #     if row["starts_on"] > datetime.now().date()
+    #     else (datetime.now().date() - row["starts_on"])
+    #     / (row["ends_on"] - row["starts_on"]),
+    #     axis=1,
+    # )
+    df["completion_percentage"] = "100%"
     df["completed"] = df["completion_percentage"].apply(
         lambda x: "completed" if x == 1 else "not completed"
     )
