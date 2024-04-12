@@ -38,13 +38,13 @@ def main(data: dict, context: dict = None):
                 end_date=end_date.strftime("%Y-%m-%d"),
             )
         )
-        assignments_inactive = unwrap_forecast_response(
-            client.get_assignments(
-                start_date=start_date.strftime("%Y-%m-%d"),
-                end_date=end_date.strftime("%Y-%m-%d"),
-                state="inactive",
-            )
-        )
+        assignments_inactive = []  # unwrap_forecast_response(
+        #     client.get_assignments(
+        #         start_date=start_date.strftime("%Y-%m-%d"),
+        #         end_date=end_date.strftime("%Y-%m-%d"),
+        #         state="inactive",
+        #     )
+        # )
         start_date += timedelta(days=180)
         assignments_list += assignments_resp + assignments_inactive
 
