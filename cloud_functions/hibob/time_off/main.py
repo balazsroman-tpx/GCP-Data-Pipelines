@@ -47,7 +47,7 @@ def get_holidays(config: dict, client: httpx.Client):
 
 
 def find_hours(row):
-    if row["endPortion"] == "all_day" and row["endPortion"] == "all_day":
+    if row["startPortion"] == "all_day" and row["endPortion"] == "all_day":
         return 8
     return 4
 
