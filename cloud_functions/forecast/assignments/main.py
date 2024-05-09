@@ -9,7 +9,7 @@ from data_pipeline_tools.util import unwrap_forecast_response, write_to_bigquery
 
 project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 if not project_id:
-    project_id = input("Enter GCP project ID: ")
+    project_id = "tpx-consulting-dashboards"
 
 
 def load_config(project_id, service) -> dict:
@@ -48,7 +48,12 @@ def main(data: dict, context: dict = None):
         start_date += timedelta(days=180)
         assignments_list += assignments_resp + assignments_inactive
 
-    assignments_df = pd.DataFrame(assignments_list)
+    final_list = []
+    for assignment in assignments_list:
+        if assignment not in final_list:
+            final_list.append(assignment)
+
+    assignments_df = pd.DataFrame(final_list)
     if len(assignments_list) > 0:
         forecast_assignment_data = expand_assignments_rows(assignments_df)
 
