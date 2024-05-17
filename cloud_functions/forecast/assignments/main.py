@@ -48,12 +48,7 @@ def main(data: dict, context: dict = None):
         start_date += timedelta(days=180)
         assignments_list += assignments_resp + assignments_inactive
 
-    final_list = []
-    for assignment in assignments_list:
-        if assignment not in final_list:
-            final_list.append(assignment)
-
-    assignments_df = pd.DataFrame(final_list)
+    assignments_df = pd.DataFrame(assignments_list).drop_duplicates()
     if len(assignments_list) > 0:
         forecast_assignment_data = expand_assignments_rows(assignments_df)
 
