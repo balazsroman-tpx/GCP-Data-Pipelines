@@ -23,7 +23,7 @@ def load_config(project_id, service) -> dict:
 
 
 def main(data: dict, context: dict = None):
-    service = "Data Pipeline - Forecast Assignments Test"
+    service = "Data Pipeline - Forecast Assignments (Active and Inactive)"
     config = load_config(project_id, service)
     client = forecast_client(project_id)
 
@@ -32,12 +32,12 @@ def main(data: dict, context: dict = None):
     assignments_list = []
     while start_date < datetime.today() + timedelta(days=800):
         end_date = start_date + timedelta(days=179)
-        assignments_resp = []  # unwrap_forecast_response(
-        #     client.get_assignments(
-        #         start_date=start_date.strftime("%Y-%m-%d"),
-        #         end_date=end_date.strftime("%Y-%m-%d"),
-        #     )
-        # )
+        assignments_active = unwrap_forecast_response(
+            client.get_assignments(
+                start_date=start_date.strftime("%Y-%m-%d"),
+                end_date=end_date.strftime("%Y-%m-%d"),
+            )
+        )
         assignments_inactive = unwrap_forecast_response(
             client.get_assignments(
                 start_date=start_date.strftime("%Y-%m-%d"),
@@ -46,7 +46,7 @@ def main(data: dict, context: dict = None):
             )
         )
         start_date += timedelta(days=180)
-        assignments_list += assignments_resp + assignments_inactive
+        assignments_list += assignments_active + assignments_inactive
 
     assignments_df = pd.DataFrame(assignments_list).drop_duplicates()
     if len(assignments_list) > 0:
