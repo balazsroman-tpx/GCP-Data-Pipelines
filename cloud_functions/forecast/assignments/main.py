@@ -58,7 +58,7 @@ def main(data: dict, context: dict = None):
             forecast_assignment_data["end_date"]
         )
         forecast_assignment_data = forecast_assignment_data[
-            forecast_assignment_data["end_date"] < START_DATE
+            forecast_assignment_data["end_date"] > START_DATE
         ]
 
         forecast_assignment_data["hours"] = (
