@@ -112,23 +112,3 @@ resource "google_bigquery_table" "forecast_placeholders" {
     kms_key_name = google_kms_crypto_key.bigquery_key.id
   }
 }
-
-
-resource "google_bigquery_table" "forecast_assignments_test" {
-  dataset_id = google_bigquery_dataset.forecast_raw.dataset_id
-  table_id   = "assignments_test"
-
-  time_partitioning {
-    type = "DAY"
-  }
-
-  labels = {
-    env = var.env
-  }
-
-  deletion_protection = false
-
-  encryption_configuration {
-    kms_key_name = google_kms_crypto_key.bigquery_key.id
-  }
-}
