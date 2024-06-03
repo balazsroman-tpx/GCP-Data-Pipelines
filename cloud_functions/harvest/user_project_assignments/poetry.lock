@@ -972,7 +972,6 @@ files = [
 [package.dependencies]
 numpy = [
     {version = ">=1.23.2", markers = "python_version >= \"3.11\""},
-    {version = ">=1.20.3", markers = "python_version < \"3.10\""},
     {version = ">=1.21.0", markers = "python_version >= \"3.10\" and python_version < \"3.11\""},
 ]
 python-dateutil = ">=2.8.1"
@@ -1335,5 +1334,5 @@ multidict = ">=4.0"
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.9"
-content-hash = "ef6cf15a659f0819542d8399807cd67750621768b21547ec64701c4accc7769a"
+python-versions = "^3.10"
+content-hash = "552047a6d14eab64f50f2959b430ea61abee7be9ddd1f971a2fbb314ec935618"

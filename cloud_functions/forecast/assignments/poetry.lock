@@ -1085,7 +1085,6 @@ files = [
 [package.dependencies]
 numpy = [
     {version = ">=1.23.2", markers = "python_version >= \"3.11\""},
-    {version = ">=1.20.3", markers = "python_version < \"3.10\""},
     {version = ">=1.21.0", markers = "python_version >= \"3.10\" and python_version < \"3.11\""},
 ]
 python-dateutil = ">=2.8.1"
@@ -1256,7 +1255,7 @@ setuptools = "*"
 [[package]]
 name = "pyforecast"
 version = "0.1.4"
-description = ""
+description = "Python binding for Forecast Harverst API"
 optional = false
 python-versions = "*"
 files = []
@@ -1269,9 +1268,9 @@ requests-cache = ">=0.4.13"
 
 [package.source]
 type = "git"
-url = "https://github.com/urquha/py_forecast"
-reference = "master"
-resolved_reference = "0ab9f30c42b8ed63372406e7d3a64777abfef22c"
+url = "https://github.com/tpximpact/py_forecast"
+reference = "main"
+resolved_reference = "c90b2dbc0105e51621c0303dbd6fd9e17a784961"
 
 [[package]]
 name = "pymeeus"
@@ -1537,5 +1536,5 @@ multidict = ">=4.0"
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.9"
-content-hash = "a39618489b806921d483c4debc1118dd95ca65db83fc6b51a09283e1a5dac39c"
+python-versions = "^3.10"
+content-hash = "adf1f35542b1d2372a01b99e6f7f14090d14abd56202ad3402d19a91953150a0"
