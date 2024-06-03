@@ -7,6 +7,8 @@ import pandas as pd
 from data_pipeline_tools.forecast_tools import forecast_client
 from data_pipeline_tools.util import unwrap_forecast_response, write_to_bigquery
 
+START_DATE = datetime(2021, 1, 1)
+
 project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 if not project_id:
     project_id = "tpx-consulting-dashboards"
@@ -51,6 +53,13 @@ def main(data: dict, context: dict = None):
     assignments_df = pd.DataFrame(assignments_list).drop_duplicates()
     if len(assignments_list) > 0:
         forecast_assignment_data = expand_assignments_rows(assignments_df)
+
+        forecast_assignment_data["end_date"] = pd.to_datetime(
+            forecast_assignment_data["end_date"]
+        )
+        forecast_assignment_data = forecast_assignment_data[
+            forecast_assignment_data["end_date"] < START_DATE
+        ]
 
         forecast_assignment_data["hours"] = (
             forecast_assignment_data["allocation"] / 3600
