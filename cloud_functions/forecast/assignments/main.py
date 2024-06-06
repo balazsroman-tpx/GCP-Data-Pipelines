@@ -54,11 +54,8 @@ def main(data: dict, context: dict = None):
     if len(assignments_list) > 0:
         forecast_assignment_data = expand_assignments_rows(assignments_df)
 
-        forecast_assignment_data["end_date"] = pd.to_datetime(
-            forecast_assignment_data["end_date"]
-        )
         forecast_assignment_data = forecast_assignment_data[
-            forecast_assignment_data["end_date"] > START_DATE
+            pd.to_datetime(forecast_assignment_data["end_date"]) > START_DATE
         ]
 
         forecast_assignment_data["hours"] = (
