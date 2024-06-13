@@ -12,6 +12,16 @@ if not project_id:
     project_id = "tpx-consulting-dashboards"
 
 
+COLUMN_MAPPING = {
+    "Source origin": "origin",
+    "Source channel": "channel",
+}
+
+
+def get_column_name(item_name: str) -> str:
+    return COLUMN_MAPPING.get(item_name, item_name.replace(" ", "_").lower())
+
+
 def update_keys(dictionary: dict, keys_to_update: list, new_keys: list) -> dict:
     broken_keys = set()
     for old_key, new_key in zip(keys_to_update, new_keys):
@@ -112,13 +122,17 @@ def main(data: dict, context):
     ]
 
     flat_deals = flatten_columns(deals_df, nested_columns)
-    flat_deals = flat_deals
     print("Deals flattened")
 
     for _, item in optioned_columns.iterrows():
-        flat_deals[item["name"].replace(" ", "_").lower()] = flat_deals[
-            item["name"].replace(" ", "_").lower()
-        ].apply(lambda x: get_option_from_key(x, pd.DataFrame(item["options"])))
+        column_name = get_column_name(item["name"])
+
+        if column_name in flat_deals.columns:
+            flat_deals[column_name] = flat_deals[column_name].apply(
+                lambda x: get_option_from_key(x, pd.DataFrame(item["options"]))
+            )
+        else:
+            print(f"Warning: Column {column_name} does not exist in flat_deals")
 
     flat_deals = flat_deals.drop(
         columns=[
