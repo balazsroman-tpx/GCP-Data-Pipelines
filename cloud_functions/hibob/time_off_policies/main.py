@@ -24,7 +24,7 @@ def get_policy_types(config: dict[str:str]) -> list[str]:
     return [
         policy_type.strip()
         for policy_type in response.json()["policyTypes"]
-        if "holiday" in policy_type.lower()
+        # if "holiday" in policy_type.lower()
     ]
 
 
@@ -33,10 +33,13 @@ def main(data: dict, context: dict = None):
     config = load_config(project_id, service)
     policies = []
     for policy_type in get_policy_types(config):
-        url = f"https://api.hibob.com/v1/timeoff/policies?policyName={policy_type}"
-        response = requests.get(url, headers=config["headers"])
-        if not response.json().get("error"):
-            policies.append(response.json())
+        policy_url = f"https://api.hibob.com/v1/timeoff/policies/names?policyTypeName={policy_type}"
+        response = requests.get(policy_url, headers=config["headers"])
+        for policy_name in response.json()["policies"]:
+            url = f"https://api.hibob.com/v1/timeoff/policies?policyName={policy_name}"
+            response = requests.get(url, headers=config["headers"])
+            if not response.json().get("error"):
+                policies.append(response.json())
     df = pd.DataFrame(policies)
     df = df[["name", "allowance"]]
 
