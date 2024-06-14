@@ -34,7 +34,7 @@ def get_holidays(config: dict, client: httpx.Client):
     start_timestamp = (datetime.now() - timedelta(days=10000)).strftime("%Y-%m-%d")
     end_timestamp = (datetime.now() + timedelta(days=10000)).strftime("%Y-%m-%d")
 
-    url = f"https://api.hibob.com/v1/timeoff/whosout?from={start_timestamp}&to={end_timestamp}&includeHourly=false&includePrivate=false"
+    url = f"https://api.hibob.com/v1/timeoff/whosout?from={start_timestamp}&to={end_timestamp}&includeHourly=false&includePrivate=true"
 
     resp = json.loads(client.get(url, headers=config["headers"], timeout=None).text)
 
