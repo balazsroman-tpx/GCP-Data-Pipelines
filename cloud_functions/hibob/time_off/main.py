@@ -1,11 +1,13 @@
+import copy
 import json
 import os
 from datetime import datetime, timedelta
-import copy
+
 import httpx
 import pandas as pd
-from data_pipeline_tools.util import write_to_bigquery
+
 from data_pipeline_tools.auth import hibob_headers
+from data_pipeline_tools.util import write_to_bigquery
 
 project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 if not project_id:
@@ -24,8 +26,7 @@ def load_config(project_id, service) -> dict:
 def main(data: dict, context: dict = None):
     service = "Data Pipeline - HiBob Time Off"
     config = load_config(project_id, service)
-    client = httpx.Client()
-    df = get_holidays(config, client)
+    df = get_holidays(config, httpx.Client())
     write_to_bigquery(config, df, "WRITE_TRUNCATE")
 
 
@@ -46,20 +47,17 @@ def get_holidays(config: dict, client: httpx.Client):
     return change_holidays_columns(df)
 
 
-def find_hours(row):
+def find_hours(row: pd.Series) -> int:
     if row["startPortion"] == "all_day" and row["endPortion"] == "all_day":
         return 8
     return 4
 
 
-def expand_holidays_rows(df):
+def expand_holidays_rows(df: pd.DataFrame) -> pd.DataFrame:
     # When an assignment is entered, it can be put in for a single day or multiple.
     # For entries spanning across multiple days, this function converts to single day entries and returns the dataframe.
-    rows_to_edit = df[df["startDate"] != df["endDate"]]
-    single_assignment_rows = df[df["startDate"] == df["endDate"]]
     edited_rows = []
-
-    for _, row in rows_to_edit.iterrows():
+    for _, row in df[df["startDate"] != df["endDate"]].iterrows():
         # get the times
         end_date = datetime.strptime(row["endDate"], "%Y-%m-%d")
         start_date = datetime.strptime(row["startDate"], "%Y-%m-%d")
@@ -79,7 +77,7 @@ def expand_holidays_rows(df):
             edited_rows.append(make_holiday_row(copy.copy(last_row), dates[-1]))
         edited_rows.append(make_holiday_row(first_row, dates[0]))
 
-    return pd.concat([single_assignment_rows, pd.DataFrame(edited_rows)])
+    return pd.concat([df[df["startDate"] == df["endDate"]], pd.DataFrame(edited_rows)])
 
 
 def make_holiday_row(row: pd.Series, date: datetime) -> pd.Series:
@@ -89,7 +87,7 @@ def make_holiday_row(row: pd.Series, date: datetime) -> pd.Series:
     return row
 
 
-def change_holidays_columns(df):
+def change_holidays_columns(df: pd.DataFrame) -> pd.DataFrame:
     df["billable"] = False
     df["entry_type"] = "holiday"
     df["project_id"] = 509809
@@ -110,7 +108,7 @@ def change_holidays_columns(df):
     )
 
 
-def get_dates(start_date: datetime, end_date: datetime) -> list:
+def get_dates(start_date: datetime, end_date: datetime) -> list[datetime]:
     date = copy.copy(start_date)
     dates_list = []
     while date <= end_date:
