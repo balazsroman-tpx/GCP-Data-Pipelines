@@ -35,6 +35,7 @@ def get_employees(config: dict):
         "managerId",
         "secondLevelManagerId",
         "contract",
+        "startDate",
     ]
     url = "https://api.hibob.com/v1/profiles"
     response = requests.get(url, headers=config["headers"]).json()
@@ -42,6 +43,7 @@ def get_employees(config: dict):
     df["managerId"] = df["work"].apply(lambda x: x.get("manager"))
     df["secondLevelManagerId"] = df["work"].apply(lambda x: x.get("secondLevelManager"))
     df["contract"] = df["work"].apply(lambda x: x.get("site"))
+    df["startDate"] = df["work"].apply(lambda x: x.get("startDate"))
     return df[cols_to_keep]
 
 
