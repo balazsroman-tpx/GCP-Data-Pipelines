@@ -15,13 +15,26 @@ project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 if not project_id:
     project_id = "tpx-consulting-dashboards"
 
+CLIENTS = [
+    "TPXimpact",
+    "TPX Engineering Academy",
+    "TPX Engineering Team",
+    "Panoply",
+    "TPXimpact D&I",
+    "TPXimpact Central",
+]
+TASKS = [
+    "Account Development",
+    "Travel Time",
+]
+
 
 def load_config(project_id, service) -> dict:
     return {
         "url": "https://api.harvestapp.com/v2/time_entries?page=",
         "headers": harvest_headers(project_id, service),
-        "dataset_id": os.environ.get("DATASET_ID"),
         "gcp_project": project_id,
+        "dataset_id": os.environ.get("DATASET_ID"),
         "table_name": os.environ.get("TABLE_NAME"),
         "location": os.environ.get("TABLE_LOCATION"),
         "service": service,
@@ -52,21 +65,12 @@ def main(data: dict, context):
     write_to_bigquery(config, df, "WRITE_TRUNCATE")
 
 
-clients = [
-    "TPXimpact",
-    "TPX Engineering Academy",
-    "TPX Engineering Team",
-    "Panoply",
-    "TPXimpact D&I",
-]
-tasks = ["Account Development", "Travel Time"]
-
-
 def get_utilisation(row):
-    if row["client_name"] in clients or row["task_name"] in tasks:
-        return 0
-    else:
-        return row["hours"]
+    return (
+        0
+        if row["client_name"] in CLIENTS or row["task_name"] in TASKS
+        else row["hours"]
+    )
 
 
 if __name__ == "__main__":
